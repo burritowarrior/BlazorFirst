@@ -1,0 +1,58 @@
+﻿@page "/SimpleList"
+
+<style type="text/css">
+.right { text-align: right; }
+</style>
+
+<h3>SimpleList</h3>
+
+<table class="table table-striped" id="example">
+    <thead>
+        <tr>
+            <th>State Name</th>
+            <th>Abbreviation</th>
+            <th>Capital</th>
+            <th>Population</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in data)
+        {
+            <tr>
+                <td>@item.StateName</td>
+                <td>@item.Abbreviation</td>
+                <td>@item.Capital</td>
+                <td class="right">@item.Population.ToString("#,0")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    public List<StatesMeta> data = new List<StatesMeta>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // AllStates = new StatesMeta[];
+
+        // JSON Helper Methods
+        // AllStates = await HttpClient.GetFromJsonAsync<StatesMeta[]>("api/state/getallstates");
+
+        data = await HttpClient.GetFromJsonAsync<List<StatesMeta>>("api/state/getallstates");
+    }
+
+    public class StatesMeta
+    {
+        public string StateName { get; set; }
+        public string Abbreviation { get; set; }
+        public string Capital { get; set; }
+        public int Population { get; set; }
+        public int Area { get; set; }
+        public System.DateTime DateEntered { get; set; }
+        public int DateRank { get; set; }
+    }
+}

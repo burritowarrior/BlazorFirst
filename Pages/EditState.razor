@@ -1,0 +1,66 @@
+﻿@page "/editstate"
+@using Models
+
+<h1>Details for @data.StateName</h1>
+<br>
+<section>
+    <EditForm Model="@data">
+        <div class="row form-group">
+            <label class="col-sm-2" for="stateName">State Name:</label>
+            <InputText id="stateName" @bind-Value="data.StateName" class="form-control col-sm-4" placeholder="Enter something"></InputText>
+        </div>
+        
+        <div class="row form-group">
+            <label for="stateName" class="col-sm-2">Abbreviation:</label>
+            <InputText id="abbreviation" @bind-Value="data.Abbreviation" class="form-control col-sm-4" placeholder="Enter abbreviation"></InputText>
+        </div>
+
+        <div class="row form-group">
+            <label for="capital" class="col-sm-2">Capital:</label>
+            <InputText id="capital" @bind-Value="data.Capital" class="form-control col-sm-4" placeholder="Enter capital"></InputText>
+        </div>
+
+        <div class="row form-group">
+            <label for="population" class="col-sm-2">Population:</label>
+            @* <InputText id="population" @bind-Value="data.Population" class="form-control col-sm-4" placeholder="Enter population"></InputText> *@
+            <InputNumber id="population" @bind-Value="data.Population" class="form-control col-sm-4"></InputNumber>
+        </div>
+
+        <div class="row form-group">
+            <label for="entered" class="col-sm-2">Entered:</label>
+            <InputDate id="entered" @bind-Value="data.DateEntered" class="form-control col-sm-4"></InputDate>
+        </div>
+
+        <div class="row form-group">
+            <label for="country" class="col-sm-2">Countries:</label>
+            <InputSelect id="country" class="form-control col-sm-4" @bind-Value="EmptyCode">
+                @foreach (var item in countries)
+                {
+                    <option value="@item.Code">@item.Name</option>
+                }
+            </InputSelect>
+        </div>
+    </EditForm>
+</section>
+
+@code {
+
+    [Inject]
+    public HttpClient httpClient { get; set; }
+    public StatesMeta data { get; set; } = new StatesMeta();
+    public List<Country> countries { get; set; } = new List<Country>();
+    public string EmptyCode { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        countries.Add(new Country { Code = "011", Name = "United States" });
+        countries.Add(new Country { Code = "034", Name = "Canada" });
+        countries.Add(new Country { Code = "052", Name = "Mexico" });
+        countries.Add(new Country { Code = "507", Name = "Panama" }); 
+        countries.Add(new Country { Code = "809", Name = "Barbados" });
+
+        EmptyCode = countries.Last().Code;  
+
+        data = await httpClient.GetFromJsonAsync<StatesMeta>("api/state/getstate/OH");
+    }
+}

@@ -1,4 +1,5 @@
 ﻿@page "/SimpleList"
+@using Models
 
 <style type="text/css">
 .right { text-align: right; }
@@ -6,6 +7,7 @@
 
 <h3>SimpleList</h3>
 
+<!-- Sample Comment goes here... //-->
 <table class="table table-striped" id="example">
     <thead>
         <tr>
@@ -13,6 +15,7 @@
             <th>Abbreviation</th>
             <th>Capital</th>
             <th>Population</th>
+            <th>Entered</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +26,7 @@
                 <td>@item.Abbreviation</td>
                 <td>@item.Capital</td>
                 <td class="right">@item.Population.ToString("#,0")</td>
+                <td>@item.DateEntered</td>
             </tr>
         }
     </tbody>
@@ -35,6 +39,7 @@
 
     public List<StatesMeta> data = new List<StatesMeta>();
 
+    // OnInitializedAsync is one of the four Blazor component life cycle events
     protected override async Task OnInitializedAsync()
     {
         // AllStates = new StatesMeta[];
@@ -45,14 +50,4 @@
         data = await HttpClient.GetFromJsonAsync<List<StatesMeta>>("api/state/getallstates");
     }
 
-    public class StatesMeta
-    {
-        public string StateName { get; set; }
-        public string Abbreviation { get; set; }
-        public string Capital { get; set; }
-        public int Population { get; set; }
-        public int Area { get; set; }
-        public System.DateTime DateEntered { get; set; }
-        public int DateRank { get; set; }
-    }
 }

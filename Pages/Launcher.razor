@@ -1,0 +1,16 @@
+﻿@page "/launcher"
+
+<h3>Launcher</h3>
+
+<Alert Show="showAlert" OnOk="@(() => showAlert = false)">
+    <h1>Alert</h1>
+    <p>Today is @DateTime.Now.DayOfWeek.</p>
+</Alert>
+
+<button @onclick="@(() => showAlert = true)">
+    Show Alert
+</button>
+
+@code {
+    private bool showAlert = false;
+}

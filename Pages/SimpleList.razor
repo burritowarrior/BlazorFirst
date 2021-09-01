@@ -3,6 +3,8 @@
 
 <style type="text/css">
 .right { text-align: right; }
+.light-green { background-color: #CCEBC5; }
+.blackText { color: #000; }
 </style>
 
 <h3>SimpleList</h3>
@@ -24,9 +26,9 @@
             <tr>
                 <td>@item.StateName</td>
                 <td>@item.Abbreviation</td>
-                <td>@item.Capital</td>
+                <td class="@(DoSomething(@item.Capital))">@item.Capital</td>
                 <td class="right">@item.Population.ToString("#,0")</td>
-                <td>@item.DateEntered</td>
+                <td>@item.DateEntered.ToString("MM-dd-yyyy")</td>
             </tr>
         }
     </tbody>
@@ -48,6 +50,13 @@
         // AllStates = await HttpClient.GetFromJsonAsync<StatesMeta[]>("api/state/getallstates");
 
         data = await HttpClient.GetFromJsonAsync<List<StatesMeta>>("api/state/getallstates");
+    }
+
+    private string DoSomething(string currentValue) 
+    {
+        Console.WriteLine(currentValue);
+        return currentValue.StartsWith("H") 
+            ? @"light-green" : "blackText";
     }
 
 }
